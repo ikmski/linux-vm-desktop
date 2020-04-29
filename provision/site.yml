@@ -1,0 +1,42 @@
+---
+- hosts: ubuntu
+  become: yes
+  become_user: root
+
+  vars:
+    - username: masaki
+    - password: passw0rd
+
+  tasks:
+  - name: set timezone to Asia/Tokyo
+    timezone:
+      name: Asia/Tokyo
+
+  - name: add user
+    user:
+      name: "{{ username }}"
+      password: "{{ password | password_hash('sha512') }}"
+      shell: /bin/bash
+      groups: admin
+      update_password: on_create
+
+  - name: install desktop
+    apt:
+      name:
+        - ubuntu-desktop
+        - ibus-mozc
+
+  - name: install packages for japanese
+    shell: "apt install -y $(check-language-support -l ja)"
+    changed_when: no
+
+  - name: install tools
+    apt:
+      name:
+        - vim
+        - tmux
+        - zsh
+        - zplug
+        - golang
+        - fzf
+        - peco

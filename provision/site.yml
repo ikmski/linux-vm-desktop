@@ -35,11 +35,34 @@
         - docker.io
         - docker-compose
 
+  - name: change directory mode
+    file:
+      path: /usr/share/zplug
+      state: directory
+      mode: '0775'
+
+  - name: modify sshd config
+    replace:
+      path: /etc/ssh/sshd_config
+      regexp: "^PasswordAuthentication no"
+      replace: "PasswordAuthentication yes"
+
   - name: add user
     user:
       name: "{{ username }}"
       password: "{{ password | password_hash('sha512') }}"
-      shell: /bin/bash
-      groups: root,docker
+      shell: /usr/bin/zsh
+      groups: root,sudo,docker
       update_password: on_create
+      generate_ssh_key: yes
+      ssh_key_file: .ssh/id_rsa
+
+  - name: add ssh config
+    template:
+      src: ./ssh-config.j2
+      dest: "/home/{{ username }}/.ssh/config"
+      owner: "{{ username }}"
+      group: "{{ username }}"
+      mode: 0600
+
 

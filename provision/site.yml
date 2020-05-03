@@ -12,14 +12,6 @@
     timezone:
       name: Asia/Tokyo
 
-  - name: add user
-    user:
-      name: "{{ username }}"
-      password: "{{ password | password_hash('sha512') }}"
-      shell: /bin/bash
-      groups: admin
-      update_password: on_create
-
   - name: install desktop
     apt:
       name:
@@ -40,3 +32,14 @@
         - golang
         - fzf
         - peco
+        - docker.io
+        - docker-compose
+
+  - name: add user
+    user:
+      name: "{{ username }}"
+      password: "{{ password | password_hash('sha512') }}"
+      shell: /bin/bash
+      groups: root,docker
+      update_password: on_create
+

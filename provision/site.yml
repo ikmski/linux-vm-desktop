@@ -18,6 +18,12 @@
         - ubuntu-desktop
         - ibus-mozc
 
+  - name: enable wayland
+    replace:
+      path: /etc/gdm3/custom.conf
+      regexp: "^#WaylandEnable=false"
+      replace: "WaylandEnable=true"
+
   - name: install packages for japanese
     shell: "apt install -y $(check-language-support -l ja)"
     changed_when: no

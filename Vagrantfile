@@ -5,14 +5,15 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "ubuntu"
 
   config.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-desktop"
     vb.gui = true
-    vb.memory = "4096"
+    vb.cpus = 2
+    vb.memory = 4096
     vb.customize [
       "modifyvm", :id,
       "--vram", "256",
       "--clipboard", "bidirectional",
       "--draganddrop", "bidirectional",
-      "--cpus", "2",
       "--ioapic", "on"
     ]
   end
